@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProtectedRoute from "./container/ProtectedRoute";
-import PublicRoute from "./container/PublicRoute";
+import protectRoute from "./container/ProtectedRoute";
+import publicRoute from "./container/PublicRoute";
 import StateProvider from "./container/StateProvider";
 import DashboardPage from "./pages/DashboardPage";
+import DevicesPage from "./pages/DevicesPage";
 import LandingPage from "./pages/LandingPage";
 
 
@@ -11,8 +12,9 @@ function App() {
     <StateProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<PublicRoute restricted={true}><LandingPage /></PublicRoute>}/>
-          <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}/>
+          <Route path="/" element={publicRoute(<LandingPage />, true)}/>
+          <Route path="/dashboard" element={protectRoute(<DashboardPage />)}/>
+          <Route path="/devices" element={protectRoute(<DevicesPage />)}/>
         </Routes>
       </BrowserRouter>
     </StateProvider>

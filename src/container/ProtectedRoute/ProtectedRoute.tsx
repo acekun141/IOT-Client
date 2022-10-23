@@ -6,10 +6,18 @@ interface IProps {
   children: JSX.Element
 }
 
-const ProtectedRoute: FC<IProps> = ({ children }) => {
+export const ProtectedRoute: FC<IProps> = ({ children }) => {
   const { user } = useContext(StateContext);
   if (!user) return <Navigate to="/" replace />;
   return children;
 }
 
-export default ProtectedRoute;
+const protectRoute = (element: JSX.Element) => {
+  return (
+    <ProtectedRoute>
+      {element}
+    </ProtectedRoute>
+  )
+}
+
+export default protectRoute;

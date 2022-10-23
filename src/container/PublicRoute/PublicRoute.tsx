@@ -8,11 +8,19 @@ interface IProps {
   restricted: boolean;
 }
 
-const PublicRoute = ({ restricted, children }: IProps) => {
+export const PublicRoute = ({ restricted, children }: IProps) => {
   const { user } = useContext(StateContext);
 
   if (!!user && restricted) return <Navigate to="/dashboard" replace />
   return children
 }
 
-export default PublicRoute;
+const publicRoute = (element: JSX.Element, restricted: boolean) => {
+  return (
+    <PublicRoute restricted={restricted}>
+      {element}
+    </PublicRoute>
+  )
+}
+
+export default publicRoute;

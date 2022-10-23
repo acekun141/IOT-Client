@@ -62,7 +62,7 @@ const LandingPage = () => {
           </Button>
         </form>
       </Box>
-      <Box bgColor="red" flex={1}>
+      <Box bgColor="gray.200" flex={1}>
       </Box>
     </Flex>
   );
