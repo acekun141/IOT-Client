@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
-import { Box, Button, Flex, Heading, Input, useBoolean, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Img, Input, useBoolean, useToast } from "@chakra-ui/react";
 import { signIn } from "../../services/authServices";
+import LandingJPG from "../../assets/landingbg.jpg";
 
 const LandingPage = () => {
   const toast = useToast();
@@ -47,7 +48,7 @@ const LandingPage = () => {
             onChange={formik.handleChange}
           />
           <Input
-            fontSize="sm" size="lg" mb="3" variant="filled" colorScheme="teal"
+            fontSize="sm" size="lg" mb="6" variant="filled" colorScheme="teal"
             type="password" name="password"
             placeholder="Password"
             value={formik.values.password}
@@ -62,7 +63,8 @@ const LandingPage = () => {
           </Button>
         </form>
       </Box>
-      <Box bgColor="gray.200" flex={1}>
+      <Box bgColor="gray.200" flex={1} maxHeight="100vh" overflow="hidden">
+        <Img src={LandingJPG} />
       </Box>
     </Flex>
   );

@@ -27,7 +27,7 @@ const DeviceSwitcher: FC<IProps> = ({ icon: Icon, ...props }) => {
         <Text color="gray.500" fontSize="xs">{props.deviceStatus}</Text>
       </Box>
       <Box>
-        <Switch colorScheme="teal" size="md" />
+        <Switch colorScheme="twitter" size="md" />
       </Box>
     </GridItem>
   );
