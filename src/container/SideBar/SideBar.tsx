@@ -1,13 +1,14 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import { StateContext } from "../StateProvider/StateProvider";
-import { BiLogOutCircle, BiGridAlt, BiDevices } from "react-icons/bi";
+import { BiLogOutCircle, BiGridAlt, BiDevices, BiMicrochip } from "react-icons/bi";
 import SideBarItem from "./components/SideBarItem";
 
 
 const SIDEBAR_ITEMS = [
   { icon: BiGridAlt, name: "Dashboard", path: "/dashboard" },
   { icon: BiDevices, name: "Devices", path: "/devices" },
+  { icon: BiMicrochip, name: "Sensors", path: "/sensors" },
 ]
 
 

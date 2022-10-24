@@ -1,18 +1,19 @@
-import { Box, Heading, Grid, GridItem, Text, Switch } from "@chakra-ui/react";
+import { Box, Heading, Grid, GridItem, Text, Switch, Flex } from "@chakra-ui/react";
 import BaseLayout from "../../container/BaseLayout";
-import { BiWind, BiTv } from "react-icons/bi"
-import DeviceSwitcher from "../../container/DeviceSwitcher";
+import DeviceList from "../../container/DeviceList";
+import SensorList from "../../container/SensorList";
 
 const DashboardPage = () => {
   return (
     <BaseLayout>
-      <Box>
+      <Box mb="6">
         <Heading as="h4" size="md" mb="2">Devices</Heading>
-        <Grid templateColumns='repeat(3, 1fr)' gap={6}>
-          <DeviceSwitcher icon={BiWind} deviceName="Air Conditioner" deviceStatus="25°C Temperature" />
-          <DeviceSwitcher icon={BiTv} deviceName="TV" deviceStatus="37% Volume" />
-        </Grid>
-        </Box>
+        <DeviceList />
+      </Box>
+      <Box>
+        <Heading as="h4" size="md" mb="2">Sensors</Heading>
+        <SensorList />
+      </Box>
       </BaseLayout>
     );
   }
