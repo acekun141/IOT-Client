@@ -15,7 +15,7 @@ const SIDEBAR_ITEMS = [
 const BaseLayout = () => {
   const { logout } = useContext(StateContext);
   return (
-    <Flex direction="column" width="300px" p="6" fontSize="sm" bgColor="white">
+    <Flex direction="column" width="300px" p="6" fontSize="sm" bgColor="white" boxShadow="md">
       {SIDEBAR_ITEMS.map((item) => (
         <SideBarItem key={item.path} icon={item.icon} name={item.name} path={item.path} />
       ))}
