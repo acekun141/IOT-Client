@@ -5,7 +5,7 @@ import { BiSun, BiDroplet } from "react-icons/bi";
 const SensorList = () => {
   return (
     <Grid
-      templateColumns='repeat(auto-fill, minmax(max(450px, 500px), 1fr))'
+      templateColumns='repeat(auto-fill, minmax(max(350px, 350px), 1fr))'
       gap={6}
     >
       <Sensor icon={BiSun} name="Light" status="good" />

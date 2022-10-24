@@ -26,6 +26,7 @@ const SideBarItem: FC<IProps> = ({ icon: Icon, ...props }) => {
     <Flex
       onClick={handleClick}
       alignItems="center"
+      opacity={cn({"1": isActive, "0.5": !isActive})}
       p="2"
       bgColor={cn({"gray.100": isActive, "white": !isActive})}
       mb="2"
