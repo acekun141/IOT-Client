@@ -14,7 +14,7 @@ export const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <QueryClientProvider client={queryClient}>
-    <ChakraProvider>
+    <ChakraProvider portalZIndex={5000}>
       <App />
     </ChakraProvider>
   </QueryClientProvider>

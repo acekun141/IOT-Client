@@ -1,24 +1,20 @@
 import { Box, Flex, GridItem, Popover, PopoverContent, PopoverTrigger, SkeletonCircle, SkeletonText, Switch, Text, useBoolean } from "@chakra-ui/react";
 import { FC } from "react";
-import { IconType } from "react-icons";
 import { BiSliderAlt } from "react-icons/bi";
-import { ColorPicker, useColor } from "react-color-palette";
 import { useToggleDevice } from "../../hooks/deviceHooks";
+import DeviceSetting, { DeviceSettingModal } from "./components/DeviceSettings";
+import _ from "lodash"
 import "react-color-palette/lib/css/styles.css";
 
-interface IProps {
-  deviceName: string;
-  deviceCode: string;
-  isActive: boolean;
-}
+interface IProps { deviceState: any }
 
-const DeviceItem: FC<IProps> = (props) => {
-  const [color, setColor] = useColor("hex", "#121212");
-  const [isActive, setIsActive] = useBoolean(props.isActive)
-  const { mutate: toggleDevice } = useToggleDevice()
+const DeviceItem: FC<IProps> = ({ deviceState: device }) => {
+  const [isShowSetting, setIsShowSetting] = useBoolean(false);
+  const [isActive, setIsActive] = useBoolean(_.get(device, "desired.is_active", false))
+  const { mutate: toggleDevice } = useToggleDevice();
 
   const handleToggleDevice = () => {
-    toggleDevice({code: props.deviceCode, isActive: !isActive});
+    toggleDevice({code: device.name, isActive: !isActive});
     setIsActive.toggle();
   }
 
@@ -34,24 +30,16 @@ const DeviceItem: FC<IProps> = (props) => {
       alignItems="center"
     >
       <Box>
-        <Text fontWeight="bold">{props.deviceName}</Text>
-        <Text color="gray.500" fontSize="xs">{props.deviceCode}</Text>
+        <Text fontWeight="bold">{device.name}</Text>
+        <Text color="gray.500" fontSize="xs">{device.code}</Text>
       </Box>
       <Box flex="1" />
       <Flex alignItems="center" justifyContent="center">
         <Switch onChange={handleToggleDevice} isChecked={isActive} colorScheme="twitter" size="md" />
-        <Popover>
-          <PopoverTrigger>
-            <Box ml="2" p="1" display="flex" bgColor="gray.200" borderRadius="lg" cursor="pointer">
-              <BiSliderAlt />
-            </Box>
-          </PopoverTrigger>
-          <PopoverContent mr="3" border="none" boxShadow="base" borderRadius="2xl">
-            <Box p="3">
-              <ColorPicker hideHEX={true} hideHSV={true} hideRGB={true} color={color} onChange={setColor} width={300}  />
-            </Box>
-          </PopoverContent>
-        </Popover>
+        <Box onClick={setIsShowSetting.on} ml="2" p="1" display="flex" bgColor="gray.200" borderRadius="lg" cursor="pointer">
+          <BiSliderAlt />
+        </Box>
+        <DeviceSettingModal isOpen={isShowSetting} onClose={setIsShowSetting.toggle} device={device} />
       </Flex>
     </GridItem>
   );

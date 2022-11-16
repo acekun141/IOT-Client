@@ -25,9 +25,7 @@ const DeviceList = () => {
           {_.get(data, "devices", []).map((device: any) => (
             <DeviceItem
               key={device.code}
-              isActive={_.get(device, "desired.is_active", false)}
-              deviceName={device.name}
-              deviceCode={device.code}
+              deviceState={device}
             />
           ))}
         </>
