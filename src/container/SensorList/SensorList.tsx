@@ -10,6 +10,8 @@ const SensorList = () => {
     >
       <Sensor icon={BiSun} name="Light" status="good" />
       <Sensor icon={BiDroplet} name="Humidity" status="warning" />
+      <Sensor icon={BiDroplet} name="Moisture" status="warning" />
+      <Sensor icon={BiDroplet} name="Temperature" status="warning" />
     </Grid>
   );
 }

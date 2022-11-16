@@ -7,6 +7,7 @@ import "react-color-palette/lib/css/styles.css";
 
 interface IProps {
   icon: IconType;
+  activeStatus?: string;
   deviceName: string;
   deviceStatus: string;
 }
