@@ -1,5 +1,5 @@
 import { Box, Flex, GridItem, Popover, PopoverContent, PopoverTrigger, SkeletonCircle, SkeletonText, Switch, Text, useBoolean } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { BiSliderAlt } from "react-icons/bi";
 import { useToggleDevice } from "../../hooks/deviceHooks";
 import DeviceSetting, { DeviceSettingModal } from "./components/DeviceSettings";
@@ -10,13 +10,17 @@ interface IProps { deviceState: any }
 
 const DeviceItem: FC<IProps> = ({ deviceState: device }) => {
   const [isShowSetting, setIsShowSetting] = useBoolean(false);
-  const [isActive, setIsActive] = useBoolean(_.get(device, "desired.is_active", false))
+  const [isActive, setIsActive] = useState(_.get(device, "desired.is_active", false))
   const { mutate: toggleDevice } = useToggleDevice();
 
   const handleToggleDevice = () => {
-    toggleDevice({code: device.name, isActive: !isActive});
-    setIsActive.toggle();
+    toggleDevice({code: device.code, isActive: !isActive});
+    setIsActive((prev: any) => !prev)
   }
+
+  useEffect(() => {
+    setIsActive(_.get(device, "desired.is_active", false))
+  }, [_.get(device, "desired.is_active", false)])
 
   return (
     <GridItem
@@ -36,9 +40,11 @@ const DeviceItem: FC<IProps> = ({ deviceState: device }) => {
       <Box flex="1" />
       <Flex alignItems="center" justifyContent="center">
         <Switch onChange={handleToggleDevice} isChecked={isActive} colorScheme="twitter" size="md" />
-        <Box onClick={setIsShowSetting.on} ml="2" p="1" display="flex" bgColor="gray.200" borderRadius="lg" cursor="pointer">
-          <BiSliderAlt />
-        </Box>
+        {!!device.have_led && (
+          <Box onClick={setIsShowSetting.on} ml="2" p="1" display="flex" bgColor="gray.200" borderRadius="lg" cursor="pointer">
+            <BiSliderAlt />
+          </Box>
+        )}
         <DeviceSettingModal isOpen={isShowSetting} onClose={setIsShowSetting.toggle} device={device} />
       </Flex>
     </GridItem>

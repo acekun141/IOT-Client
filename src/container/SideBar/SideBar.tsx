@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { useContext } from "react";
 import { StateContext } from "../StateProvider/StateProvider";
 import { BiLogOutCircle, BiGridAlt, BiDevices, BiMicrochip } from "react-icons/bi";
@@ -14,6 +14,9 @@ const SIDEBAR_ITEMS = [
 
 const BaseLayout = () => {
   const { logout } = useContext(StateContext);
+  const [isMobile] = useMediaQuery('(max-width: 400px)');
+  
+  if (isMobile) return null;
   return (
     <Flex direction="column" width="300px" p="6" fontSize="sm" bgColor="white" boxShadow="md">
       {SIDEBAR_ITEMS.map((item) => (
