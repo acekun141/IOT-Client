@@ -1,6 +1,6 @@
 import { Grid } from "@chakra-ui/react";
 import DeviceItem from "../DeviceItem";
-import { useDevices } from "../../hooks/deviceHooks";
+import { useDevice, useDevices } from "../../hooks/deviceHooks";
 import { DeviceItemLoading } from "../DeviceItem/DeviceItem";
 import _ from "lodash"
 import { useEffect } from "react";
@@ -9,7 +9,7 @@ import configs from "../../utils/configs";
 
 
 const DeviceList = () => {
-  const { status, data, error, isFetching, isLoading, refetch } = useDevices();
+  const { status, data, error, isFetching, isLoading, refetch } = useDevice("ESP32");
 
 
   useEffect(() => {
@@ -35,12 +35,20 @@ const DeviceList = () => {
         </>
       ) : (
         <>
-          {_.get(data, "devices", []).map((device: any) => (
-            <DeviceItem
-              key={device.code}
-              deviceState={device}
-            />
-          ))}
+          <DeviceItem
+            name="pump"
+            isOn={_.get(data, "device.desired.pump") == "on"}
+            isLed={false}
+            deviceCode={_.get(data, "device.code")}
+            deviceState={_.get(data, "device")}
+          />
+          <DeviceItem
+            name="led"
+            isOn={_.get(data, "device.desired.led") == "on"}
+            isLed={true}
+            deviceCode={_.get(data, "device.code")}
+            deviceState={_.get(data, "device")}
+          />
         </>
       )}
     </Grid>

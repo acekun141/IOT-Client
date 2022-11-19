@@ -7,21 +7,31 @@ import _ from "lodash"
 import "react-color-palette/lib/css/styles.css";
 import { toColor } from "react-color-palette";
 
-interface IProps { deviceState: any }
+interface IProps {
+  isLed: boolean;
+  isOn: boolean;
+  name: string;
+  deviceCode: string;
+  deviceState: any;
+}
 
-const DeviceItem: FC<IProps> = ({ deviceState: device }) => {
-  const [isShowSetting, setIsShowSetting] = useBoolean(false);
-  const [isActive, setIsActive] = useState(_.get(device, "desired.is_active", false))
-  const { mutate: toggleDevice } = useToggleDevice();
+const DeviceItem: FC<IProps> = (props) => {
+  const [isOn, setIsOn] = useState(props.isOn);
+  const { mutate: toggleDevice } = useToggleDevice("ESP32");
+  useEffect(() => { setIsOn(props.isOn) }, [props.isOn]);
 
   const handleToggleDevice = () => {
-    toggleDevice({code: device.code, isActive: !isActive});
-    setIsActive((prev: any) => !prev)
-  }
-
-  useEffect(() => {
-    setIsActive(_.get(device, "desired.is_active", false))
-  }, [_.get(device, "desired.is_active", false)])
+    const newValue = isOn ? "off" : "on"
+    const state = {
+      "led": _.get(props.deviceState, "desired.led"),
+      "pump": _.get(props.deviceState, "desired.pump"),
+      "red": _.get(props.deviceState, "desired.red"),
+      "green": _.get(props.deviceState, "desired.green"),
+      "blue": _.get(props.deviceState, "desired.blue")     
+    }
+    const updatedState = _.set(state, props.name, newValue)
+    toggleDevice(updatedState);
+  };
 
   return (
     <GridItem
@@ -35,13 +45,12 @@ const DeviceItem: FC<IProps> = ({ deviceState: device }) => {
       alignItems="center"
     >
       <Box>
-        <Text fontWeight="bold">{device.name}</Text>
-        <Text color="gray.500" fontSize="xs">{device.code}</Text>
+        <Text fontWeight="bold">{props.name}</Text>
       </Box>
       <Box flex="1" />
       <Flex alignItems="center" justifyContent="center">
-        <Switch onChange={handleToggleDevice} isChecked={isActive} colorScheme="twitter" size="md" />
-        {!!device.have_led && (
+        <Switch onChange={handleToggleDevice} isChecked={isOn} colorScheme="twitter" size="md" />
+        {/* {!!device.have_led && (
           <Box
             onClick={setIsShowSetting.on}
             ml="2"
@@ -55,7 +64,7 @@ const DeviceItem: FC<IProps> = ({ deviceState: device }) => {
             cursor="pointer"
           />
         )}
-        <DeviceSettingModal isOpen={isShowSetting} onClose={setIsShowSetting.toggle} device={device} />
+        <DeviceSettingModal isOpen={isShowSetting} onClose={setIsShowSetting.toggle} device={device} /> */}
       </Flex>
     </GridItem>
   );
