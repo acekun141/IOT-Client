@@ -4,17 +4,17 @@ import { Box } from "@chakra-ui/react";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const DataChart = () => {
+const DataChart = ({ data }: {data: any[]}) => {
   return (
     <Box width="100%">
       <Chart
         type="line"
         data={{
-          labels: ['8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '13 PM'],
+          labels: data.map(item => item.date),
           datasets: [{
             backgroundColor: '#1DA1F2',
             borderColor: '#1DA1F2',
-            data: [30, 10, 5, 2, 20, 30, 45]
+            data: data.map(item => item.value)
           }]
         }}
         options={{

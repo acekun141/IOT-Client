@@ -8,7 +8,8 @@ import DataChart from "../DataChart";
 interface IProps {
   name: string;
   icon: IconType;
-  status: "good" | "warning" | "dangerous"
+  status: "good" | "warning" | "dangerous",
+  data: any[];
 }
 
 const statusBadge = {
@@ -29,11 +30,11 @@ const Sensor: FC<IProps> = ({ icon: Icon, ...props }) => {
         <Box pr="2">
           <Icon size="20px" />
         </Box>
-        <Heading as="h6" size="sm">{props.name}</Heading>
+        <Heading textTransform="capitalize" as="h6" size="sm">{props.name}</Heading>
         <Box flex="1" />
         <Badge p="1" pl="2" pr="2" borderRadius="xl" colorScheme={bagde.colorSchema}>{bagde.text}</Badge>
       </Flex>
-      <DataChart />
+      <DataChart data={props.data} />
     </Box>
   );
 }
