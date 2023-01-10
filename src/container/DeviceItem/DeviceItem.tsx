@@ -1,11 +1,20 @@
-import { Box, color, Flex, GridItem, Popover, PopoverContent, PopoverTrigger, SkeletonCircle, SkeletonText, Switch, Text, useBoolean } from "@chakra-ui/react";
-import { FC, useEffect, useState } from "react";
-import { BiSliderAlt } from "react-icons/bi";
+import {
+  Box,
+  Flex,
+  GridItem,
+  SkeletonCircle,
+  SkeletonText,
+  Switch,
+  Text,
+  useBoolean,
+} from "@chakra-ui/react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useToggleDevice } from "../../hooks/deviceHooks";
-import DeviceSetting, { DeviceSettingModal } from "./components/DeviceSettings";
-import _ from "lodash"
+import { DeviceSettingModal, RGBState } from "./components/DeviceSettings";
+import _ from "lodash";
 import "react-color-palette/lib/css/styles.css";
 import { toColor } from "react-color-palette";
+import { IoFlashlightOutline, IoSpeedometerOutline } from "react-icons/io5";
 
 interface IProps {
   isLed: boolean;
@@ -17,21 +26,47 @@ interface IProps {
 
 const DeviceItem: FC<IProps> = (props) => {
   const [isOn, setIsOn] = useState(props.isOn);
+  const [isShowSetting, setIsShowSetting] = useBoolean(false);
   const { mutate: toggleDevice } = useToggleDevice("ESP32");
-  useEffect(() => { setIsOn(props.isOn) }, [props.isOn]);
+
+  useEffect(() => {
+    setIsOn(props.isOn);
+  }, [props.isOn]);
 
   const handleToggleDevice = () => {
-    const newValue = isOn ? "off" : "on"
+    const newValue = isOn ? "off" : "on";
     const state = {
-      "led": _.get(props.deviceState, "desired.led"),
-      "pump": _.get(props.deviceState, "desired.pump"),
-      "red": _.get(props.deviceState, "desired.red"),
-      "green": _.get(props.deviceState, "desired.green"),
-      "blue": _.get(props.deviceState, "desired.blue")     
-    }
-    const updatedState = _.set(state, props.name, newValue)
+      led: _.get(props.deviceState, "desired.led"),
+      pump: _.get(props.deviceState, "desired.pump"),
+      red: _.get(props.deviceState, "desired.red"),
+      green: _.get(props.deviceState, "desired.green"),
+      blue: _.get(props.deviceState, "desired.blue"),
+    };
+    const updatedState = _.set(state, props.name, newValue);
     toggleDevice(updatedState);
   };
+
+  const handleChangeRGB = (rgbState: RGBState) => {
+    const state = {
+      led: _.get(props.deviceState, "desired.led"),
+      pump: _.get(props.deviceState, "desired.pump"),
+      red: rgbState.red,
+      green: rgbState.green,
+      blue: rgbState.blue,
+    };
+    toggleDevice(state);
+    setIsShowSetting.off();
+  };
+
+  const rgbState = useMemo(() => {
+    return {
+      red: _.get(props.deviceState, "desired.red"),
+      green: _.get(props.deviceState, "desired.green"),
+      blue: _.get(props.deviceState, "desired.blue"),
+    };
+  }, [props.deviceState]);
+
+  const deviceColor = useMemo(() => (isOn ? "black" : "gray"), [isOn]);
 
   return (
     <GridItem
@@ -44,13 +79,25 @@ const DeviceItem: FC<IProps> = (props) => {
       borderRadius="2xl"
       alignItems="center"
     >
-      <Box>
-        <Text fontWeight="bold">{props.name}</Text>
+      {props.isLed ? (
+        <IoFlashlightOutline size="2rem" color={deviceColor} />
+      ) : (
+        <IoSpeedometerOutline size="2rem" color={deviceColor} />
+      )}
+      <Box ml="3">
+        <Text textTransform="capitalize" fontWeight="bold" color={deviceColor}>
+          {props.name}
+        </Text>
       </Box>
       <Box flex="1" />
       <Flex alignItems="center" justifyContent="center">
-        <Switch onChange={handleToggleDevice} isChecked={isOn} colorScheme="twitter" size="md" />
-        {/* {!!device.have_led && (
+        <Switch
+          onChange={handleToggleDevice}
+          isChecked={isOn}
+          colorScheme="twitter"
+          size="md"
+        />
+        {!!props.isLed && (
           <Box
             onClick={setIsShowSetting.on}
             ml="2"
@@ -59,17 +106,29 @@ const DeviceItem: FC<IProps> = (props) => {
             display="flex"
             borderColor="blackAlpha.200"
             borderWidth="revert-layer"
-            bgColor={toColor("rgb", { r: device.desired.red, g: device.desired.green, b: device.desired.blue }).hex}
+            bgColor={
+              toColor("rgb", {
+                r: rgbState.red,
+                g: rgbState.green,
+                b: rgbState.blue,
+              }).hex
+            }
             borderRadius="lg"
             cursor="pointer"
           />
         )}
-        <DeviceSettingModal isOpen={isShowSetting} onClose={setIsShowSetting.toggle} device={device} /> */}
+        {!!isShowSetting && (
+          <DeviceSettingModal
+            isOpen={isShowSetting}
+            onClose={setIsShowSetting.toggle}
+            rgbState={rgbState}
+            onChange={handleChangeRGB}
+          />
+        )}
       </Flex>
     </GridItem>
   );
-}
-
+};
 
 export const DeviceItemLoading = () => {
   return (
@@ -89,7 +148,7 @@ export const DeviceItemLoading = () => {
         <SkeletonText />
       </Box>
     </GridItem>
-  )
-}
+  );
+};
 
 export default DeviceItem;
