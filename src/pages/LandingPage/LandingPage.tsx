@@ -38,7 +38,7 @@ const LandingPage = () => {
 
   return (
     <Flex minHeight="100vh">
-      <Box bgColor="white" width="500px" p="16">
+      <Box bgColor="white" width={{ sm: "100%", md: "500px" }} p={{ sm: 10, md: 16 }}>
         <form onSubmit={formik.handleSubmit}>
           <Heading as="h4" size="md" mb="4">Sign in</Heading>
           <Input
@@ -63,7 +63,7 @@ const LandingPage = () => {
           </Button>
         </form>
       </Box>
-      <Box bgColor="gray.200" flex={1} maxHeight="100vh" overflow="hidden">
+      <Box display={{ sm: "none", md: "block" }} bgColor="gray.200" flex={1} maxHeight="100vh" overflow="hidden">
         <Img src={LandingJPG} />
       </Box>
     </Flex>

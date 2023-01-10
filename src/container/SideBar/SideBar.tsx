@@ -14,11 +14,11 @@ const SIDEBAR_ITEMS = [
 
 const BaseLayout = () => {
   const { logout } = useContext(StateContext);
-  const [isMobile] = useMediaQuery('(max-width: 400px)');
+  // const [isMobile] = useMediaQuery('(max-width: 400px)');
   
-  if (isMobile) return null;
+  // if (isMobile) return null;
   return (
-    <Flex direction="column" width="300px" p="6" fontSize="sm" bgColor="white" boxShadow="md">
+    <Flex direction="column" p="6" fontSize="sm" bgColor="white">
       {SIDEBAR_ITEMS.map((item) => (
         <SideBarItem key={item.path} icon={item.icon} name={item.name} path={item.path} />
       ))}

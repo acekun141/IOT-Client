@@ -49,7 +49,6 @@ const SensorList = () => {
       temperature: sensor_data.map((item: any) => _get_chart_data(item, "temperature")),
     }
   }, [data]);
-  console.log(sensorChartState);
 
   return (
     <Box>
@@ -68,6 +67,7 @@ const SensorList = () => {
       <Grid
         templateColumns='repeat(auto-fill, minmax(500px, 1fr))'
         gap={6}
+        overflow="auto"
       >
         <Sensor data={sensorChartState.humidity} icon={WiCloud} name="humidity" status="good" />
         <Sensor data={sensorChartState.light} icon={WiDaySunny} name="light" status="good" />
